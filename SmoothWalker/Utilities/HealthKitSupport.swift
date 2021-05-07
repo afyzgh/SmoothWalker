@@ -55,6 +55,8 @@ private func preferredUnit(for identifier: String, sampleType: HKSampleType? = n
             unit = .count()
         case .distanceWalkingRunning, .sixMinuteWalkTestDistance:
             unit = .meter()
+        case .walkingSpeed:
+            unit = HKUnit(from: "m/s")
         default:
             break
         }
@@ -80,14 +82,42 @@ func createAnchorDate() -> Date {
     return anchorDate
 }
 
+/// Return an anchor date for a statistics collection query.
+func createAnchorDateToday(from date: Date = Date()) -> Date {
+    // Set the arbitrary anchor date to 10 mins later.
+    return Calendar.current.date(byAdding: .minute, value: 10, to: date)!
+}
+
 /// This is commonly used for date intervals so that we get the last seven days worth of data,
 /// because we assume today (`Date()`) is providing data as well.
 func getLastWeekStartDate(from date: Date = Date()) -> Date {
     return Calendar.current.date(byAdding: .day, value: -6, to: date)!
 }
 
+/// This is commonly used for date intervals so that we get the last seven days worth of data,
+/// because we assume today (`Date()`) is providing data as well.
+func getFourWeekStartDate(from date: Date = Date()) -> Date {
+    return Calendar.current.date(byAdding: .day, value: -27, to: date)!
+}
+
+/// This is commonly used for date intervals so that we get the last seven days worth of data,
+/// because we assume today (`Date()`) is providing data as well.
+func getThreeMonthStartDate(from date: Date = Date()) -> Date {
+    return Calendar.current.date(byAdding: .day, value: -89, to: date)!
+}
+
 func createLastWeekPredicate(from endDate: Date = Date()) -> NSPredicate {
     let startDate = getLastWeekStartDate(from: endDate)
+    return HKQuery.predicateForSamples(withStart: startDate, end: endDate)
+}
+
+func createFourWeekPredicate(from endDate: Date = Date()) -> NSPredicate {
+    let startDate = getFourWeekStartDate(from: endDate)
+    return HKQuery.predicateForSamples(withStart: startDate, end: endDate)
+}
+
+func createThreeMonthPredicate(from endDate: Date = Date()) -> NSPredicate {
+    let startDate = getThreeMonthStartDate(from: endDate)
     return HKQuery.predicateForSamples(withStart: startDate, end: endDate)
 }
 

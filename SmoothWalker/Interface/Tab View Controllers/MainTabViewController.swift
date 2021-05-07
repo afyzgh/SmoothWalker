@@ -29,6 +29,7 @@ class MainTabViewController: UITabBarController {
         let viewControllers = [
             createWelcomeViewController(),
             createWeeklyQuantitySampleTableViewController(),
+            createWalkingSpeedViewController(),
             createChartViewController(),
             createWeeklyReportViewController()
         ]
@@ -57,6 +58,16 @@ class MainTabViewController: UITabBarController {
         viewController.tabBarItem = UITabBarItem(title: "Health Data",
                                                  image: UIImage(systemName: "triangle"),
                                                  selectedImage: UIImage(systemName: "triangle.fill"))
+        return viewController
+    }
+    
+    private func createWalkingSpeedViewController() -> UIViewController {
+        let dataTypeIdentifier = HKQuantityTypeIdentifier.walkingSpeed.rawValue
+        let viewController = WalkingSpeedTableViewController(dataTypeIdentifier: dataTypeIdentifier)
+        
+        viewController.tabBarItem = UITabBarItem(title: "Walking Speed",
+                                                 image: UIImage(systemName: "figure.walk.circle"),
+                                                 selectedImage: UIImage(systemName: "figure.walk.circle.fill"))
         return viewController
     }
     
